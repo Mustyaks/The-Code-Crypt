@@ -24,6 +24,9 @@ function Editor() {
           Write code in the presence of spirits... if you dare
         </p>
         <div className="mt-3 space-y-1">
+          <p className="text-purple-400 text-sm font-semibold">
+            🎬 Click "Demo Mode" for a 20-second showcase of all features!
+          </p>
           <p className="text-blood text-sm">
             ⚠️ Beware: Lines 3, 7, and 12 are cursed! Click them to solve riddles.
           </p>
@@ -47,6 +50,93 @@ function Editor() {
         transition={{ duration: 0.8, delay: 0.4 }}
         className="mt-8"
       >
+        <Card className="border-purple-500/50 bg-purple-900/20 backdrop-blur mb-6">
+          <CardHeader>
+            <CardTitle className="text-purple-400">🎬 Demo Mode</CardTitle>
+            <CardDescription>20-second scripted showcase for judges</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <p className="text-gray-300 text-sm">
+                Click the "Demo Mode" button to watch an automated demonstration of all features!
+              </p>
+              <div className="bg-purple-900/30 border border-purple-500/30 rounded-lg p-4">
+                <div className="font-semibold text-purple-300 text-sm mb-3">Demo Timeline (20 seconds):</div>
+                <div className="space-y-2 text-xs text-gray-400">
+                  <div className="flex items-start gap-2">
+                    <span className="text-purple-400 font-mono">0-8s:</span>
+                    <span>Automatically types spooky sample code with animation</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-purple-400 font-mono">8s:</span>
+                    <span>Highlights cursed line 7, plays ghost whisper</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-purple-400 font-mono">10s:</span>
+                    <span>Triggers screen glitch effect with sound</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-purple-400 font-mono">12s:</span>
+                    <span>Creates syntax error → Monster spawns</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-purple-400 font-mono">15s:</span>
+                    <span>Fixes error → Monster despawns, success chime</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-purple-400 font-mono">18s:</span>
+                    <span>Final glitch effect</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-purple-400 font-mono">20s:</span>
+                    <span>Demo complete! ✨</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 p-3 bg-green-900/20 border border-green-500/30 rounded-lg">
+                <span className="text-2xl">👻</span>
+                <p className="text-xs text-green-300">
+                  <strong>Bonus:</strong> Ghosts react in real-time to all actions during the demo!
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-blood/50 bg-ghost/50 backdrop-blur mb-6">
+          <CardHeader>
+            <CardTitle className="text-blood">⚰️ Resurrection Mode</CardTitle>
+            <CardDescription>Bring old code back from the dead</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <p className="text-gray-300 text-sm">
+                Click the "Resurrect Code" button to modernize legacy JavaScript. The Ghost AI will transform your old code with modern patterns!
+              </p>
+              <div className="grid gap-3 md:grid-cols-2">
+                <div className="p-3 rounded-lg bg-purple-900/20 border border-purple-500/30">
+                  <div className="font-semibold text-purple-400 text-sm mb-2">Transformations</div>
+                  <ul className="text-xs text-gray-400 space-y-1">
+                    <li>• <code className="text-purple-300">var</code> → <code className="text-purple-300">const/let</code></li>
+                    <li>• Functions → Arrow functions</li>
+                    <li>• String concat → Template literals</li>
+                    <li>• Adds JSDoc comments</li>
+                  </ul>
+                </div>
+                <div className="p-3 rounded-lg bg-purple-900/20 border border-purple-500/30">
+                  <div className="font-semibold text-purple-400 text-sm mb-2">Spooky Animation</div>
+                  <ul className="text-xs text-gray-400 space-y-1">
+                    <li>• 👻 Ghosts circle the editor</li>
+                    <li>• ⚡ White flash effect</li>
+                    <li>• 🎵 Success chime sound</li>
+                    <li>• ✨ 3-second ritual</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         <Card className="border-blood/50 bg-ghost/50 backdrop-blur mb-6">
           <CardHeader>
             <CardTitle className="text-blood">👾 Error Monster System</CardTitle>
@@ -271,6 +361,10 @@ function Editor() {
               <li className="flex items-start gap-2">
                 <span className="text-blood">🔊</span>
                 <span><strong>Ghost Whispers:</strong> Eerie sound effects when clicking cursed lines</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-blood">⚰️</span>
+                <span><strong>Resurrection Mode:</strong> Modernize old code with Ghost AI transformation</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blood">📱</span>

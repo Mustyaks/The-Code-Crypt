@@ -1,0 +1,282 @@
+/* Resurrection Modal Styles */
+.resurrection-modal {
+  position: relative;
+  max-width: 600px;
+  width: 100%;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%);
+  border: 3px solid #8B0000;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 
+    0 0 50px rgba(139, 0, 0, 0.6),
+    inset 0 0 50px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+}
+
+/* Header */
+.resurrection-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Content */
+.resurrection-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* Textarea */
+.resurrection-textarea {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(10, 10, 10, 0.9);
+  border: 2px solid #8B0000;
+  border-radius: 8px;
+  color: #e0e0e0;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  resize: vertical;
+  min-height: 200px;
+  transition: all 0.3s ease;
+}
+
+.resurrection-textarea:focus {
+  outline: none;
+  border-color: #a00000;
+  box-shadow: 0 0 20px rgba(139, 0, 0, 0.5);
+}
+
+.resurrection-textarea::placeholder {
+  color: #666;
+}
+
+.resurrection-textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Info box */
+.resurrection-info {
+  background: rgba(139, 0, 0, 0.1);
+  border: 1px solid rgba(139, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.resurrection-info code {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #ff6666;
+  font-size: 0.75rem;
+}
+
+/* Error message */
+.error-message {
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem;
+  color: #ff6666;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+/* Resurrection Ritual (loading state) */
+.resurrection-ritual {
+  text-align: center;
+  padding: 2rem 0;
+  position: relative;
+  z-index: 2;
+}
+
+.resurrection-progress {
+  width: 100%;
+  height: 8px;
+  background: rgba(139, 0, 0, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.resurrection-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #8B0000, #ff0000, #8B0000);
+  background-size: 200% 100%;
+  animation: progressShine 1s linear infinite;
+  box-shadow: 0 0 10px rgba(139, 0, 0, 0.8);
+}
+
+@keyframes progressShine {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Floating Spirits */
+.resurrection-spirit {
+  position: absolute;
+  font-size: 3rem;
+  pointer-events: none;
+  z-index: 10;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+}
+
+.spirit-1 {
+  top: 20%;
+  left: 10%;
+}
+
+.spirit-2 {
+  top: 20%;
+  right: 10%;
+}
+
+.spirit-3 {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* White Flash Effect */
+.resurrection-flash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Decorative Candles */
+.resurrection-candles {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2rem;
+  font-size: 1.5rem;
+  z-index: 1;
+}
+
+.candle {
+  display: inline-block;
+  animation: candleFlicker 2s ease-in-out infinite;
+}
+
+.candle:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.candle:nth-child(3) {
+  animation-delay: 1s;
+}
+
+@keyframes candleFlicker {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
+}
+
+/* Ambient glow */
+.resurrection-modal::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  background: radial-gradient(circle, rgba(139, 0, 0, 0.2) 0%, transparent 70%);
+  animation: ambientPulse 3s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes ambientPulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+/* Pentagram background (subtle) */
+.resurrection-modal::after {
+  content: '⭐';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  font-size: 20rem;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
+  animation: pentagramRotate 20s linear infinite;
+}
+
+@keyframes pentagramRotate {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .resurrection-modal {
+    padding: 1.5rem;
+    max-width: 95%;
+  }
+
+  .resurrection-textarea {
+    font-size: 0.75rem;
+    min-height: 150px;
+  }
+
+  .resurrection-spirit {
+    font-size: 2rem;
+  }
+
+  .resurrection-candles {
+    gap: 1rem;
+    font-size: 1.2rem;
+  }
+}
+
+/* Scrollbar for textarea */
+.resurrection-textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+.resurrection-textarea::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+}
+
+.resurrection-textarea::-webkit-scrollbar-thumb {
+  background: #8B0000;
+  border-radius: 4px;
+}
+
+.resurrection-textarea::-webkit-scrollbar-thumb:hover {
+  background: #a00000;
+}

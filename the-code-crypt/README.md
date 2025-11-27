@@ -365,3 +365,219 @@ All effects are optimized with:
 - Hardware acceleration
 - Efficient animations
 - Minimal JavaScript overhead
+
+
+## ⚰️ Resurrection Mode
+
+Bring old, legacy JavaScript code back from the dead with modern transformations!
+
+### How It Works
+
+1. Click the "Resurrect Code" button in the editor header
+2. Paste your old/legacy JavaScript code
+3. Watch the 3-second resurrection ritual
+4. Receive modernized code with Ghost AI transformations
+
+### Transformations Applied
+
+**Variable Declarations**
+- `var` → `const` or `let`
+- Automatically chooses appropriate declaration
+
+**Function Syntax**
+- `function name() {}` → `const name = () => {}`
+- Anonymous functions → Arrow functions
+- Callback functions → Arrow functions
+
+**String Handling**
+- String concatenation → Template literals
+- `'Hello ' + name + '!'` → `` `Hello ${name}!` ``
+
+**Code Quality**
+- Adds `'use strict'` mode
+- Inserts JSDoc comments
+- Adds helpful modernization tips
+- Includes resurrection header comment
+
+### Spooky Animation
+
+During the resurrection ritual:
+- **3 Ghost Spirits** circle the editor
+- **White Flash** effect at peak moment
+- **Success Chime** sound on completion
+- **Progress Bar** shows ritual progress
+- **Status Messages** narrate the process
+
+### Example
+
+**Before (Old Code):**
+```javascript
+var greeting = 'Hello';
+function sayHello(name) {
+  return greeting + ' ' + name;
+}
+```
+
+**After (Resurrected):**
+```javascript
+// 👻 Code resurrected and modernized by Ghost AI
+// Original code brought back from the crypt!
+
+'use strict';
+
+/**
+ * Resurrected function - modernized by ghost AI
+ */
+const sayHello = (name) => {
+  return `${greeting} ${name}`;
+}
+```
+
+### Validation
+
+- Minimum 10 characters required
+- Maximum 10,000 characters allowed
+- Empty code rejected with spooky message
+
+### UI Features
+
+- Modal with rotating coffin icon
+- Flickering candles decoration
+- Pentagram background (subtle)
+- Ambient red glow pulsing
+- Resurrection progress indicator
+- Error messages for invalid input
+
+
+## 🎬 Demo Mode
+
+A 20-second scripted demonstration showcasing all features - perfect for judges and presentations!
+
+### How to Use
+
+1. Navigate to the Editor page (`/editor`)
+2. Click the **"▶️ Demo Mode"** button in the editor header
+3. Watch the automated demonstration
+4. Click **"⏹️ Stop Demo"** to end early (or wait 20 seconds)
+
+### Demo Timeline
+
+**0-8 seconds: Typing Animation**
+- Automatically types spooky sample code
+- Character-by-character animation (50ms per char)
+- Random typing speed variations
+- Ghosts react to typing activity
+
+**8 seconds: Cursed Line Activation**
+- Highlights line 7 (cursed line)
+- Scrolls to the line
+- Adds activation animation
+
+**8.5 seconds: Ghost Whisper**
+- Plays eerie whisper sound effect
+- Low volume ambient sound
+- Layered oscillator frequencies
+
+**10 seconds: Screen Glitch**
+- Triggers full screen glitch effect
+- Chromatic aberration
+- Screen shake and skew
+- Glitch sound effect
+
+**12 seconds: Error Creation**
+- Introduces syntax error (missing bracket)
+- Monster spawns automatically
+- Error tooltip appears
+- Ghosts react to error
+
+**15 seconds: Error Fix**
+- Automatically fixes the syntax error
+- Monster despawns with animation
+- Success chime plays
+- Ghosts cheer
+
+**18 seconds: Final Glitch**
+- One more glitch effect
+- Visual spectacle
+
+**20 seconds: Demo Complete**
+- Demo automatically stops
+- Editor remains in final state
+- All features demonstrated
+
+### Features Showcased
+
+✅ **Typing Animation** - Realistic code entry
+✅ **Ghost AI** - Real-time reactions
+✅ **Cursed Lines** - Line highlighting
+✅ **Sound Effects** - Whispers, glitches, chimes
+✅ **Screen Glitches** - Visual effects
+✅ **Error Monsters** - Spawn and despawn
+✅ **Visual Feedback** - All animations
+✅ **Interactive Elements** - Full system demo
+
+### Technical Details
+
+**DemoController.js**
+- Class-based controller
+- Async/await for timing
+- Timeout management
+- Clean cleanup on stop
+- Event scheduling system
+
+**Integration**
+- Refs to CodeMirror editor
+- State management via callbacks
+- Sound effect triggers
+- Visual effect coordination
+
+**Code Sample**
+```javascript
+// Demo code includes:
+- Function declarations
+- Cursed line (line 7)
+- Syntax error (line 12)
+- Console logs
+- Comments
+```
+
+### Demo Variations
+
+The controller supports multiple demo types:
+- **Full Demo** (20s) - All features
+- **Quick Demo** (10s) - Essential features
+- **Minimal Demo** (5s) - Basic showcase
+
+### Stop Demo
+
+- Click "Stop Demo" button
+- Clears all timeouts
+- Stops typing animation
+- Resets demo state
+- Editor remains editable
+
+### Perfect For
+
+- 🎯 Judge presentations
+- 📊 Feature demonstrations
+- 🎓 Tutorials and onboarding
+- 🎥 Video recordings
+- 📱 Social media clips
+- 🏆 Competition showcases
+
+### Demo Indicator
+
+While demo is running:
+- Purple banner at top
+- "Demo Mode Active" message
+- Rotating film icon 🎬
+- Cannot start resurrection mode
+- Can stop at any time
+
+### Auto-Stop
+
+Demo automatically stops after 20 seconds, ensuring:
+- Consistent timing
+- No infinite loops
+- Clean state management
+- Resource cleanup

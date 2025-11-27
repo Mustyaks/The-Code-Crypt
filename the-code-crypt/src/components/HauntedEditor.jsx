@@ -5,12 +5,15 @@ import { javascript } from '@codemirror/lang-javascript'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorView, Decoration } from '@codemirror/view'
 import { StateField, StateEffect } from '@codemirror/state'
+import { Button } from '@/components/ui/button'
 import Ghost from './Ghost'
 import Monster from './Monster'
 import RiddleDialog from './RiddleDialog'
+import ResurrectionModal from './ResurrectionModal'
 import { isCursedLine, getRiddle, checkAnswer, getAllCursedLines } from '@/lib/cursedLines'
 import { detectErrors, getUniqueErrors } from '@/lib/errorDetection'
 import { playGhostWhisper, playGlitchSound, playSuccessChime } from '@/lib/soundEffects'
+import { DemoController } from '@/lib/DemoController'
 import './hauntedEditor.css'
 
 const defaultCode = `// Welcome to the Haunted Editor...
@@ -38,8 +41,12 @@ function HauntedEditor({ initialValue = defaultCode, onChange }) {
   const [errors, setErrors] = useState([])
   const [isGlitching, setIsGlitching] = useState(false)
   const [showWhisper, setShowWhisper] = useState(false)
+  const [showResurrection, setShowResurrection] = useState(false)
+  const [resurrectionMessage, setResurrectionMessage] = useState('')
+  const [isDemoRunning, setIsDemoRunning] = useState(false)
   const editorViewRef = useRef(null)
   const glitchTimerRef = useRef(null)
+  const demoControllerRef = useRef(null)
 
   const handleChange = (value) => {
     setCode(value)
@@ -157,6 +164,55 @@ function HauntedEditor({ initialValue = defaultCode, onChange }) {
     setTimeout(() => setIsFlickering(false), 1000)
   }
 
+  // Handle resurrection
+  const handleResurrection = (modernCode, message) => {
+    setCode(modernCode)
+    setResurrectionMessage(message)
+    playSuccessChime()
+    
+    // Show message for a few seconds
+    setTimeout(() => setResurrectionMessage(''), 5000)
+  }
+
+  // Handle demo mode
+  const startDemo = () => {
+    if (isDemoRunning) return
+
+    setIsDemoRunning(true)
+    
+    // Create demo controller
+    demoControllerRef.current = new DemoController(
+      editorViewRef,
+      setCode,
+      triggerGlitch
+    )
+    
+    // Start demo
+    demoControllerRef.current.start()
+
+    // Auto-stop after 20 seconds
+    setTimeout(() => {
+      setIsDemoRunning(false)
+    }, 20000)
+  }
+
+  const stopDemo = () => {
+    if (demoControllerRef.current) {
+      demoControllerRef.current.stop()
+      demoControllerRef.current = null
+    }
+    setIsDemoRunning(false)
+  }
+
+  // Cleanup demo on unmount
+  useEffect(() => {
+    return () => {
+      if (demoControllerRef.current) {
+        demoControllerRef.current.stop()
+      }
+    }
+  }, [])
+
   // Create CodeMirror extension for cursed lines
   const cursedLineExtension = () => {
     const cursedLineMark = Decoration.line({
@@ -238,6 +294,32 @@ function HauntedEditor({ initialValue = defaultCode, onChange }) {
       <div className="fog-layer fog-2"></div>
       <div className="fog-layer fog-3"></div>
 
+      {/* Demo Mode Indicator */}
+      <AnimatePresence>
+        {isDemoRunning && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-purple-900/90 border-2 border-purple-500 rounded-lg px-6 py-3"
+          >
+            <div className="flex items-center gap-3">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                className="text-2xl"
+              >
+                🎬
+              </motion.div>
+              <div>
+                <div className="text-purple-200 font-bold text-sm">Demo Mode Active</div>
+                <div className="text-purple-300 text-xs">Showcasing all features...</div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Whisper Visual Effect */}
       <AnimatePresence>
         {showWhisper && (
@@ -267,10 +349,29 @@ function HauntedEditor({ initialValue = defaultCode, onChange }) {
             <span className="title-icon">⚰️</span>
             <span>Haunted Code Editor</span>
           </div>
-          <div className="editor-controls">
-            <div className="control-dot red"></div>
-            <div className="control-dot yellow"></div>
-            <div className="control-dot green"></div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant={isDemoRunning ? "destructive" : "default"}
+              size="sm"
+              onClick={isDemoRunning ? stopDemo : startDemo}
+              className="text-xs"
+            >
+              {isDemoRunning ? '⏹️ Stop Demo' : '▶️ Demo Mode'}
+            </Button>
+            <Button
+              variant="spooky"
+              size="sm"
+              onClick={() => setShowResurrection(true)}
+              className="text-xs"
+              disabled={isDemoRunning}
+            >
+              ⚰️ Resurrect
+            </Button>
+            <div className="editor-controls">
+              <div className="control-dot red"></div>
+              <div className="control-dot yellow"></div>
+              <div className="control-dot green"></div>
+            </div>
           </div>
         </div>
 
@@ -356,6 +457,31 @@ function HauntedEditor({ initialValue = defaultCode, onChange }) {
           }}
         />
       )}
+
+      {/* Resurrection Modal */}
+      <ResurrectionModal
+        isOpen={showResurrection}
+        onClose={() => setShowResurrection(false)}
+        onResurrect={handleResurrection}
+      />
+
+      {/* Resurrection Success Message */}
+      <AnimatePresence>
+        {resurrectionMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-24 left-1/2 transform -translate-x-1/2 z-50 bg-green-900/90 border-2 border-green-500 rounded-lg p-4 max-w-md"
+          >
+            <div className="text-center">
+              <div className="text-2xl mb-2">✨</div>
+              <h3 className="text-green-300 font-bold mb-2">Code Resurrected!</h3>
+              <p className="text-green-200 text-sm whitespace-pre-line">{resurrectionMessage}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Spooky Status Bar */}
       <div className="editor-status-bar">
