@@ -1,0 +1,259 @@
+/* Ghost AI Component Styles */
+.ghost-ai {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+  transition: all 0.3s ease;
+}
+
+.ghost-ai.active {
+  filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.5));
+}
+
+/* Ghost Character */
+.ghost-character {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.ghost-character:hover {
+  transform: scale(1.1);
+}
+
+.ghost-emoji {
+  display: block;
+  user-select: none;
+  animation: ghostBob 2s ease-in-out infinite;
+}
+
+@keyframes ghostBob {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Personality-specific styles */
+.ghost-ai.helper .ghost-emoji {
+  filter: hue-rotate(120deg);
+}
+
+.ghost-ai.mischief .ghost-emoji {
+  filter: hue-rotate(0deg);
+  animation: ghostShake 0.5s ease-in-out infinite;
+}
+
+@keyframes ghostShake {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-3deg);
+  }
+  75% {
+    transform: rotate(3deg);
+  }
+}
+
+.ghost-ai.watcher .ghost-emoji {
+  filter: hue-rotate(240deg);
+  animation: ghostPulse 3s ease-in-out infinite;
+}
+
+@keyframes ghostPulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Ghost Name Tag */
+.ghost-nametag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 2px 8px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 4px;
+  white-space: nowrap;
+  text-shadow: 0 0 5px currentColor;
+  animation: nametagGlow 2s ease-in-out infinite;
+}
+
+@keyframes nametagGlow {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Message Bubble */
+.ghost-message {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 12px;
+  border: 2px solid;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 20;
+  animation: messageBounce 0.5s ease-out;
+}
+
+@keyframes messageBounce {
+  0% {
+    transform: translateX(-50%) translateY(10px) scale(0.8);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-5px) scale(1.05);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+.ghost-message::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid;
+  border-top-color: inherit;
+}
+
+/* Activity Indicator */
+.ghost-activity-indicator {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  animation: activityPulse 1s ease-in-out infinite;
+}
+
+@keyframes activityPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+}
+
+/* Mood Indicator */
+.ghost-mood-indicator {
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  font-size: 1.2rem;
+  animation: moodAppear 0.3s ease-out;
+}
+
+@keyframes moodAppear {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.ghost-mood-indicator:empty {
+  display: none;
+}
+
+/* Interaction Counter */
+.ghost-interaction-count {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 20px;
+  height: 20px;
+  background: #8B0000;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: bold;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ghost-emoji {
+    font-size: 2rem !important;
+  }
+
+  .ghost-nametag {
+    font-size: 0.65rem;
+  }
+
+  .ghost-message {
+    font-size: 0.65rem;
+    padding: 6px 10px;
+    top: -50px;
+  }
+
+  .ghost-mood-indicator {
+    font-size: 1rem;
+  }
+}
+
+/* Hover effects */
+.ghost-ai:hover .ghost-character {
+  animation: ghostExcited 0.5s ease-in-out;
+}
+
+@keyframes ghostExcited {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(5deg);
+  }
+}
+
+/* Personality-specific message styles */
+.ghost-ai.helper .ghost-message {
+  color: #88ff88;
+}
+
+.ghost-ai.mischief .ghost-message {
+  color: #ff8888;
+}
+
+.ghost-ai.watcher .ghost-message {
+  color: #8888ff;
+}

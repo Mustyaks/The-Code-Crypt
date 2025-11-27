@@ -1,0 +1,289 @@
+import { useState, useRef, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import CodeMirror from '@uiw/react-codemirror'
+import { javascript } from '@codemirror/lang-javascript'
+import { oneDark } from '@codemirror/theme-one-dark'
+import { EditorView, Decoration } from '@codemirror/view'
+import { StateField, StateEffect } from '@codemirror/state'
+import Ghost from './Ghost'
+import RiddleDialog from './RiddleDialog'
+import { isCursedLine, getRiddle, checkAnswer, getAllCursedLines } from '@/lib/cursedLines'
+import './hauntedEditor.css'
+
+const defaultCode = `// Welcome to the Haunted Editor...
+// Where code writes itself... or does it? 👻
+
+function summonSpirit() {
+  const spirits = ['👻', '🦇', '🕷️', '⚰️'];
+  return spirits[Math.floor(Math.random() * spirits.length)];
+}
+
+console.log('The crypt awakens...', summonSpirit());
+
+// Beware: Your code may be possessed...
+`
+
+function HauntedEditor({ initialValue = defaultCode, onChange }) {
+  const [code, setCode] = useState(initialValue)
+  const [hasError, setHasError] = useState(false)
+  const [scareCount, setScareCount] = useState(0)
+  const [cheerCount, setCheerCount] = useState(0)
+  const [exorcisedLines, setExorcisedLines] = useState(new Set())
+  const [currentRiddle, setCurrentRiddle] = useState(null)
+  const [currentLine, setCurrentLine] = useState(null)
+  const [isFlickering, setIsFlickering] = useState(false)
+  const editorViewRef = useRef(null)
+
+  const handleChange = (value) => {
+    setCode(value)
+    if (onChange) onChange(value)
+    
+    // Simple error detection (check for common syntax issues)
+    const hasBasicError = 
+      (value.match(/\(/g) || []).length !== (value.match(/\)/g) || []).length ||
+      (value.match(/\{/g) || []).length !== (value.match(/\}/g) || []).length ||
+      (value.match(/\[/g) || []).length !== (value.match(/\]/g) || []).length
+    
+    setHasError(hasBasicError)
+  }
+
+  // Ghost interaction handlers
+  const handleScare = () => {
+    setScareCount((prev) => prev + 1)
+    console.log('👻 Ghost scared you!')
+  }
+
+  const handleCheer = () => {
+    setCheerCount((prev) => prev + 1)
+    console.log('👻 Ghost is cheering for you!')
+  }
+
+  // Handle line click
+  const handleLineClick = (view, pos) => {
+    const line = view.state.doc.lineAt(pos)
+    const lineNumber = line.number
+
+    if (isCursedLine(lineNumber) && !exorcisedLines.has(lineNumber)) {
+      const riddle = getRiddle(lineNumber)
+      setCurrentRiddle(riddle)
+      setCurrentLine(lineNumber)
+    }
+  }
+
+  // Handle riddle answer
+  const handleRiddleAnswer = (answer) => {
+    const isCorrect = checkAnswer(currentLine, answer)
+
+    if (isCorrect) {
+      // Correct answer - exorcise the line
+      setExorcisedLines((prev) => new Set([...prev, currentLine]))
+      setCheerCount((prev) => prev + 1)
+      console.log(`✅ Line ${currentLine} exorcised!`)
+    } else {
+      // Wrong answer - trigger scare and flicker
+      setScareCount((prev) => prev + 1)
+      triggerFlicker()
+      console.log(`❌ Wrong answer for line ${currentLine}!`)
+    }
+
+    setCurrentRiddle(null)
+    setCurrentLine(null)
+  }
+
+  // Trigger editor flicker effect
+  const triggerFlicker = () => {
+    setIsFlickering(true)
+    setTimeout(() => setIsFlickering(false), 1000)
+  }
+
+  // Create CodeMirror extension for cursed lines
+  const cursedLineExtension = () => {
+    const cursedLineMark = Decoration.line({
+      attributes: { class: 'cursed-line' }
+    })
+    
+    const exorcisedLineMark = Decoration.line({
+      attributes: { class: 'exorcised-line' }
+    })
+
+    return StateField.define({
+      create() {
+        return Decoration.none
+      },
+      update(decorations, tr) {
+        const builder = []
+        const allCursedLines = getAllCursedLines()
+
+        for (let i = 1; i <= tr.state.doc.lines; i++) {
+          if (allCursedLines.includes(i)) {
+            const line = tr.state.doc.line(i)
+            if (exorcisedLines.has(i)) {
+              builder.push(exorcisedLineMark.range(line.from))
+            } else {
+              builder.push(cursedLineMark.range(line.from))
+            }
+          }
+        }
+
+        return Decoration.set(builder)
+      },
+      provide: f => EditorView.decorations.from(f)
+    })
+  }
+
+  // Click handler extension
+  const clickExtension = EditorView.domEventHandlers({
+    click: (event, view) => {
+      const pos = view.posAtCoords({ x: event.clientX, y: event.clientY })
+      if (pos) {
+        handleLineClick(view, pos)
+      }
+    }
+  })
+
+  // Editor state for ghosts
+  const editorState = {
+    code,
+    hasError,
+  }
+
+  return (
+    <div className="haunted-editor-container">
+      {/* AI Ghost 1: Helper - Top Right */}
+      <Ghost
+        personality="Helper"
+        editorState={editorState}
+        onCheer={handleCheer}
+        position={{ top: '5%', right: '5%' }}
+      />
+
+      {/* AI Ghost 2: Mischief - Top Left */}
+      <Ghost
+        personality="Mischief"
+        editorState={editorState}
+        onScare={handleScare}
+        position={{ top: '15%', left: '8%' }}
+      />
+
+      {/* AI Ghost 3: Watcher - Bottom Right */}
+      <Ghost
+        personality="Watcher"
+        editorState={editorState}
+        position={{ bottom: '10%', right: '10%' }}
+      />
+
+      {/* Fog Animation Background */}
+      <div className="fog-layer fog-1"></div>
+      <div className="fog-layer fog-2"></div>
+      <div className="fog-layer fog-3"></div>
+
+      {/* Editor Wrapper with Flickering Border */}
+      <motion.div 
+        className="editor-wrapper"
+        animate={isFlickering ? {
+          opacity: [1, 0.3, 1, 0.5, 1],
+          scale: [1, 0.98, 1, 0.99, 1],
+        } : {}}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="editor-header">
+          <div className="editor-title">
+            <span className="title-icon">⚰️</span>
+            <span>Haunted Code Editor</span>
+          </div>
+          <div className="editor-controls">
+            <div className="control-dot red"></div>
+            <div className="control-dot yellow"></div>
+            <div className="control-dot green"></div>
+          </div>
+        </div>
+
+        <div className="editor-content">
+          <CodeMirror
+            value={code}
+            height="400px"
+            theme={oneDark}
+            extensions={[
+              javascript({ jsx: true }),
+              cursedLineExtension(),
+              clickExtension
+            ]}
+            onChange={handleChange}
+            onCreateEditor={(view) => {
+              editorViewRef.current = view
+            }}
+            className="codemirror-haunted"
+            basicSetup={{
+              lineNumbers: true,
+              highlightActiveLineGutter: true,
+              highlightSpecialChars: true,
+              foldGutter: true,
+              drawSelection: true,
+              dropCursor: true,
+              allowMultipleSelections: true,
+              indentOnInput: true,
+              bracketMatching: true,
+              closeBrackets: true,
+              autocompletion: true,
+              rectangularSelection: true,
+              crosshairCursor: true,
+              highlightActiveLine: true,
+              highlightSelectionMatches: true,
+              closeBracketsKeymap: true,
+              searchKeymap: true,
+              foldKeymap: true,
+              completionKeymap: true,
+              lintKeymap: true,
+            }}
+          />
+        </div>
+
+        {/* Flickering Cursor Effect Overlay */}
+        <div className="cursor-flicker"></div>
+      </motion.div>
+
+      {/* Riddle Dialog */}
+      {currentRiddle && (
+        <RiddleDialog
+          riddle={currentRiddle}
+          lineNumber={currentLine}
+          onAnswer={handleRiddleAnswer}
+          onClose={() => {
+            setCurrentRiddle(null)
+            setCurrentLine(null)
+          }}
+        />
+      )}
+
+      {/* Spooky Status Bar */}
+      <div className="editor-status-bar">
+        <span className="status-item">
+          <span className="status-icon">🕯️</span>
+          Lines: {code.split('\n').length}
+        </span>
+        <span className="status-item">
+          <span className="status-icon">👻</span>
+          Ghosts: 3 Active
+        </span>
+        <span className="status-item">
+          <span className="status-icon">⚰️</span>
+          Cursed: {getAllCursedLines().length - exorcisedLines.size}
+        </span>
+        <span className="status-item">
+          <span className="status-icon">✨</span>
+          Exorcised: {exorcisedLines.size}
+        </span>
+        <span className="status-item">
+          <span className="status-icon">😈</span>
+          Scares: {scareCount}
+        </span>
+        <span className="status-item">
+          <span className="status-icon">💀</span>
+          {hasError ? 'Error!' : 'OK'}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+export default HauntedEditor
