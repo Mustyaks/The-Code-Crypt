@@ -265,6 +265,14 @@ function Editor() {
                 <span><strong>Custom Styling:</strong> Blood-red theme with dark backgrounds</span>
               </li>
               <li className="flex items-start gap-2">
+                <span className="text-blood">⚡</span>
+                <span><strong>Screen Glitches:</strong> Random glitch effects every 15-25 seconds</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-blood">🔊</span>
+                <span><strong>Ghost Whispers:</strong> Eerie sound effects when clicking cursed lines</span>
+              </li>
+              <li className="flex items-start gap-2">
                 <span className="text-blood">📱</span>
                 <span><strong>Responsive Design:</strong> Works on all screen sizes</span>
               </li>

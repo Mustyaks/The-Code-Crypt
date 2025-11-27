@@ -10,6 +10,7 @@ import Monster from './Monster'
 import RiddleDialog from './RiddleDialog'
 import { isCursedLine, getRiddle, checkAnswer, getAllCursedLines } from '@/lib/cursedLines'
 import { detectErrors, getUniqueErrors } from '@/lib/errorDetection'
+import { playGhostWhisper, playGlitchSound, playSuccessChime } from '@/lib/soundEffects'
 import './hauntedEditor.css'
 
 const defaultCode = `// Welcome to the Haunted Editor...
@@ -35,7 +36,10 @@ function HauntedEditor({ initialValue = defaultCode, onChange }) {
   const [currentLine, setCurrentLine] = useState(null)
   const [isFlickering, setIsFlickering] = useState(false)
   const [errors, setErrors] = useState([])
+  const [isGlitching, setIsGlitching] = useState(false)
+  const [showWhisper, setShowWhisper] = useState(false)
   const editorViewRef = useRef(null)
+  const glitchTimerRef = useRef(null)
 
   const handleChange = (value) => {
     setCode(value)
@@ -82,6 +86,32 @@ function HauntedEditor({ initialValue = defaultCode, onChange }) {
     console.log('👻 Ghost is cheering for you!')
   }
 
+  // Random screen glitch effect (every 15-25 seconds)
+  useEffect(() => {
+    const scheduleGlitch = () => {
+      const delay = 15000 + Math.random() * 10000 // 15-25 seconds
+      glitchTimerRef.current = setTimeout(() => {
+        triggerGlitch()
+        scheduleGlitch() // Schedule next glitch
+      }, delay)
+    }
+
+    scheduleGlitch()
+
+    return () => {
+      if (glitchTimerRef.current) {
+        clearTimeout(glitchTimerRef.current)
+      }
+    }
+  }, [])
+
+  // Trigger screen glitch
+  const triggerGlitch = () => {
+    setIsGlitching(true)
+    playGlitchSound()
+    setTimeout(() => setIsGlitching(false), 300)
+  }
+
   // Handle line click
   const handleLineClick = (view, pos) => {
     const line = view.state.doc.lineAt(pos)
@@ -91,6 +121,11 @@ function HauntedEditor({ initialValue = defaultCode, onChange }) {
       const riddle = getRiddle(lineNumber)
       setCurrentRiddle(riddle)
       setCurrentLine(lineNumber)
+      
+      // Play ghost whisper sound and show visual effect
+      playGhostWhisper()
+      setShowWhisper(true)
+      setTimeout(() => setShowWhisper(false), 1000)
     }
   }
 
@@ -102,11 +137,13 @@ function HauntedEditor({ initialValue = defaultCode, onChange }) {
       // Correct answer - exorcise the line
       setExorcisedLines((prev) => new Set([...prev, currentLine]))
       setCheerCount((prev) => prev + 1)
+      playSuccessChime()
       console.log(`✅ Line ${currentLine} exorcised!`)
     } else {
       // Wrong answer - trigger scare and flicker
       setScareCount((prev) => prev + 1)
       triggerFlicker()
+      triggerGlitch()
       console.log(`❌ Wrong answer for line ${currentLine}!`)
     }
 
@@ -201,9 +238,24 @@ function HauntedEditor({ initialValue = defaultCode, onChange }) {
       <div className="fog-layer fog-2"></div>
       <div className="fog-layer fog-3"></div>
 
+      {/* Whisper Visual Effect */}
+      <AnimatePresence>
+        {showWhisper && (
+          <motion.div
+            className="whisper-effect"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 0.3, scale: 1.2 }}
+            exit={{ opacity: 0, scale: 1.5 }}
+            transition={{ duration: 1 }}
+          >
+            👻
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Editor Wrapper with Flickering Border */}
       <motion.div 
-        className="editor-wrapper"
+        className={`editor-wrapper ${isGlitching ? 'glitch' : ''}`}
         animate={isFlickering ? {
           opacity: [1, 0.3, 1, 0.5, 1],
           scale: [1, 0.98, 1, 0.99, 1],
@@ -222,7 +274,7 @@ function HauntedEditor({ initialValue = defaultCode, onChange }) {
           </div>
         </div>
 
-        <div className="editor-content" style={{ position: 'relative' }}>
+        <div className={`editor-content ${isGlitching ? 'glitch-chromatic' : ''}`} style={{ position: 'relative' }}>
           <CodeMirror
             value={code}
             height="400px"

@@ -487,3 +487,327 @@
     filter: brightness(0.7);
   }
 }
+
+
+/* ========================================
+   GLOBAL UI EFFECTS
+   ======================================== */
+
+/* Random Background Flicker - Subtle Red Pulses */
+@keyframes backgroundRedPulse {
+  0%, 100% {
+    background-color: rgba(10, 10, 10, 1);
+  }
+  50% {
+    background-color: rgba(20, 5, 5, 1);
+  }
+}
+
+.haunted-editor-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(139, 0, 0, 0.05) 0%, transparent 70%);
+  animation: randomRedPulse 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes randomRedPulse {
+  0%, 100% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  20% {
+    opacity: 0;
+  }
+  45% {
+    opacity: 0.5;
+  }
+  55% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 0.2;
+  }
+  90% {
+    opacity: 0;
+  }
+}
+
+/* Enhanced Fog Layer Movement */
+.fog-layer {
+  animation-timing-function: ease-in-out;
+  will-change: transform, opacity;
+}
+
+.fog-layer.fog-1 {
+  animation: enhancedFogDrift1 25s infinite linear;
+}
+
+.fog-layer.fog-2 {
+  animation: enhancedFogDrift2 30s infinite linear;
+}
+
+.fog-layer.fog-3 {
+  animation: enhancedFogDrift3 35s infinite linear;
+}
+
+@keyframes enhancedFogDrift1 {
+  0% {
+    transform: translateX(-100%) translateY(0) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateX(0%) translateY(-20px) scale(1.1);
+    opacity: 0.4;
+  }
+  75% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(100%) translateY(0) scale(1);
+    opacity: 0.3;
+  }
+}
+
+@keyframes enhancedFogDrift2 {
+  0% {
+    transform: translateX(-100%) translateY(0) scale(1.2);
+    opacity: 0.2;
+  }
+  33% {
+    opacity: 0.4;
+  }
+  66% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateX(100%) translateY(15px) scale(1);
+    opacity: 0.2;
+  }
+}
+
+@keyframes enhancedFogDrift3 {
+  0% {
+    transform: translateX(-100%) translateY(0) rotate(0deg);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translateX(50%) translateY(-10px) rotate(2deg);
+    opacity: 0.25;
+  }
+  100% {
+    transform: translateX(100%) translateY(0) rotate(0deg);
+    opacity: 0.15;
+  }
+}
+
+/* Screen Glitch Effect */
+.editor-wrapper.glitch {
+  animation: screenGlitch 0.3s ease-in-out;
+}
+
+@keyframes screenGlitch {
+  0% {
+    transform: translate(0, 0) skew(0deg);
+    filter: hue-rotate(0deg);
+  }
+  10% {
+    transform: translate(-2px, 1px) skew(0.5deg);
+    filter: hue-rotate(90deg);
+  }
+  20% {
+    transform: translate(2px, -1px) skew(-0.5deg);
+    filter: hue-rotate(-90deg);
+  }
+  30% {
+    transform: translate(-1px, 2px) skew(0.3deg);
+    filter: hue-rotate(45deg);
+  }
+  40% {
+    transform: translate(1px, -2px) skew(-0.3deg);
+    filter: hue-rotate(-45deg);
+  }
+  50% {
+    transform: translate(-2px, 0px) skew(0.2deg);
+    filter: hue-rotate(180deg) brightness(1.2);
+  }
+  60% {
+    transform: translate(2px, 1px) skew(-0.2deg);
+    filter: hue-rotate(-180deg);
+  }
+  70% {
+    transform: translate(-1px, -1px) skew(0.1deg);
+    filter: hue-rotate(90deg);
+  }
+  80% {
+    transform: translate(1px, 1px) skew(-0.1deg);
+    filter: hue-rotate(-90deg);
+  }
+  90% {
+    transform: translate(0, -1px) skew(0deg);
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    transform: translate(0, 0) skew(0deg);
+    filter: hue-rotate(0deg);
+  }
+}
+
+/* Glitch overlay effect */
+.editor-wrapper.glitch::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 0, 0, 0.1) 0px,
+    rgba(0, 255, 0, 0.1) 2px,
+    rgba(0, 0, 255, 0.1) 4px
+  );
+  opacity: 0;
+  animation: glitchOverlay 0.3s ease-in-out;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+@keyframes glitchOverlay {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Scanline effect during glitch */
+.editor-wrapper.glitch::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  animation: scanline 0.3s linear;
+  pointer-events: none;
+  z-index: 1001;
+}
+
+@keyframes scanline {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+/* Chromatic aberration effect */
+.editor-content.glitch-chromatic {
+  animation: chromaticAberration 0.2s ease-in-out;
+}
+
+@keyframes chromaticAberration {
+  0%, 100% {
+    text-shadow: none;
+  }
+  25% {
+    text-shadow: -2px 0 red, 2px 0 blue;
+  }
+  50% {
+    text-shadow: 2px 0 red, -2px 0 blue;
+  }
+  75% {
+    text-shadow: -1px 0 red, 1px 0 blue;
+  }
+}
+
+/* Ambient pulsing glow on editor */
+.editor-wrapper {
+  animation: ambientGlow 10s ease-in-out infinite;
+}
+
+@keyframes ambientGlow {
+  0%, 100% {
+    box-shadow: 
+      0 0 30px rgba(139, 0, 0, 0.3),
+      inset 0 0 50px rgba(0, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow: 
+      0 0 50px rgba(139, 0, 0, 0.5),
+      inset 0 0 60px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* Cursed line activation effect */
+.cursed-line.activated {
+  animation: cursedActivation 0.5s ease-out;
+}
+
+@keyframes cursedActivation {
+  0% {
+    background: rgba(139, 0, 0, 0.15);
+    box-shadow: inset 0 0 10px rgba(139, 0, 0, 0.3);
+  }
+  50% {
+    background: rgba(139, 0, 0, 0.5);
+    box-shadow: 
+      inset 0 0 30px rgba(139, 0, 0, 0.8),
+      0 0 20px rgba(139, 0, 0, 0.6);
+  }
+  100% {
+    background: rgba(139, 0, 0, 0.15);
+    box-shadow: inset 0 0 10px rgba(139, 0, 0, 0.3);
+  }
+}
+
+/* Whisper visual effect */
+.whisper-effect {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4rem;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999;
+  animation: whisperAppear 1s ease-out;
+}
+
+@keyframes whisperAppear {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  50% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
+/* Performance optimizations */
+.haunted-editor-container,
+.editor-wrapper,
+.fog-layer {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}

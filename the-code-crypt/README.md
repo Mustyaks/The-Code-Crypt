@@ -281,3 +281,87 @@ errors.map(error => (
 2. Create a syntax error (e.g., remove a closing bracket)
 3. Watch a monster spawn next to the error line
 4. Fix the error to make the monster disappear
+
+
+## 🎭 Global UI Effects
+
+The application features immersive atmospheric effects throughout:
+
+### Background Effects
+
+**Subtle Red Pulses**
+- Random red flickers in the background
+- Creates an ominous atmosphere
+- Combines with base background flicker
+
+**Moving Fog Layers**
+- Three independent fog layers
+- Slow, continuous movement
+- Opacity pulsing for depth
+- Enhanced drift animations
+
+**Screen Vignette**
+- Dark edges that breathe
+- Focuses attention on content
+- Subtle pulsing effect
+
+**Noise Overlay**
+- Subtle film grain effect
+- Adds texture to the interface
+- Constant flickering
+
+### Editor-Specific Effects
+
+**Random Screen Glitches**
+- Occurs every 15-25 seconds
+- Chromatic aberration
+- Screen shake and skew
+- RGB color separation
+- Scanline effect
+- Accompanied by glitch sound
+
+**Cursed Line Activation**
+- Ghost whisper sound effect (low volume)
+- Visual ghost emoji appears
+- Line highlights with red glow
+- Triggered when clicking cursed lines
+
+**Wrong Answer Effects**
+- Editor flickers violently
+- Screen glitch triggered
+- Ghost scream reaction
+- Multiple visual distortions
+
+### Sound Effects
+
+All sounds are generated using Web Audio API:
+
+**Ghost Whisper** 🔊
+- Layered sine wave oscillators
+- Frequency sweep from 200Hz to 100Hz
+- Low volume (0.1) for ambiance
+- Plays on cursed line click
+
+**Screen Glitch** ⚡
+- White noise burst
+- Very short duration (100ms)
+- Low volume (0.05)
+- Plays during glitch effects
+
+**Monster Growl** 👾
+- Deep sawtooth wave
+- Frequency sweep 80Hz to 40Hz
+- Plays when monsters spawn
+
+**Success Chime** ✨
+- Ascending notes (C5, E5, G5)
+- Plays when line is exorcised
+- Pleasant reward sound
+
+### Performance
+
+All effects are optimized with:
+- CSS `will-change` properties
+- Hardware acceleration
+- Efficient animations
+- Minimal JavaScript overhead
