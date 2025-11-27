@@ -23,9 +23,14 @@ function Editor() {
         <p className="text-gray-400 text-lg">
           Write code in the presence of spirits... if you dare
         </p>
-        <p className="text-blood text-sm mt-2">
-          ⚠️ Beware: Lines 3, 7, and 12 are cursed! Click them to solve riddles and exorcise the curse.
-        </p>
+        <div className="mt-3 space-y-1">
+          <p className="text-blood text-sm">
+            ⚠️ Beware: Lines 3, 7, and 12 are cursed! Click them to solve riddles.
+          </p>
+          <p className="text-red-400 text-sm">
+            👾 Syntax errors spawn monsters! Fix your code to make them disappear.
+          </p>
+        </div>
       </motion.div>
 
       <motion.div
@@ -42,6 +47,50 @@ function Editor() {
         transition={{ duration: 0.8, delay: 0.4 }}
         className="mt-8"
       >
+        <Card className="border-blood/50 bg-ghost/50 backdrop-blur mb-6">
+          <CardHeader>
+            <CardTitle className="text-blood">👾 Error Monster System</CardTitle>
+            <CardDescription>Monsters spawn when syntax errors are detected</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <p className="text-gray-300 text-sm">
+                When you make a syntax error, a monster spawns next to the problematic line. 
+                Fix the error to make the monster disappear!
+              </p>
+              <div className="grid gap-3 md:grid-cols-3">
+                <div className="p-3 rounded-lg bg-red-900/20 border border-red-500/30 text-center">
+                  <div className="text-3xl mb-2">🦑</div>
+                  <div className="font-semibold text-red-400 text-sm mb-1">Bracket Monster</div>
+                  <p className="text-xs text-gray-400">Unmatched (), {}, []</p>
+                </div>
+                <div className="p-3 rounded-lg bg-red-900/20 border border-red-500/30 text-center">
+                  <div className="text-3xl mb-2">🐙</div>
+                  <div className="font-semibold text-red-400 text-sm mb-1">Quote Monster</div>
+                  <p className="text-xs text-gray-400">Unmatched ', ", `</p>
+                </div>
+                <div className="p-3 rounded-lg bg-red-900/20 border border-red-500/30 text-center">
+                  <div className="text-3xl mb-2">👹</div>
+                  <div className="font-semibold text-red-400 text-sm mb-1">Semicolon Monster</div>
+                  <p className="text-xs text-gray-400">Missing semicolons</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 bg-purple-900/20 border border-purple-500/30 rounded-lg">
+                <span className="text-2xl">✨</span>
+                <div>
+                  <p className="text-sm text-purple-300 font-semibold mb-1">Monster Behavior</p>
+                  <ul className="text-xs text-gray-400 space-y-1">
+                    <li>• Wiggles and pulses with red glow</li>
+                    <li>• Shows error message in tooltip</li>
+                    <li>• Automatically despawns when error is fixed</li>
+                    <li>• Multiple monsters can spawn for multiple errors</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         <Card className="border-blood/50 bg-ghost/50 backdrop-blur mb-6">
           <CardHeader>
             <CardTitle className="text-blood">⚰️ Cursed Lines Challenge</CardTitle>
@@ -194,6 +243,10 @@ function Editor() {
               <li className="flex items-start gap-2">
                 <span className="text-blood">👻</span>
                 <span><strong>AI Ghost System:</strong> Three intelligent ghosts with unique personalities that react to your code</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-blood">👾</span>
+                <span><strong>Error Monsters:</strong> Syntax errors spawn monsters that wiggle and glow red until fixed</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blood">⚰️</span>

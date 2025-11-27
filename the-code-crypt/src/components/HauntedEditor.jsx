@@ -1,13 +1,15 @@
 import { useState, useRef, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import CodeMirror from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorView, Decoration } from '@codemirror/view'
 import { StateField, StateEffect } from '@codemirror/state'
 import Ghost from './Ghost'
+import Monster from './Monster'
 import RiddleDialog from './RiddleDialog'
 import { isCursedLine, getRiddle, checkAnswer, getAllCursedLines } from '@/lib/cursedLines'
+import { detectErrors, getUniqueErrors } from '@/lib/errorDetection'
 import './hauntedEditor.css'
 
 const defaultCode = `// Welcome to the Haunted Editor...
@@ -32,19 +34,41 @@ function HauntedEditor({ initialValue = defaultCode, onChange }) {
   const [currentRiddle, setCurrentRiddle] = useState(null)
   const [currentLine, setCurrentLine] = useState(null)
   const [isFlickering, setIsFlickering] = useState(false)
+  const [errors, setErrors] = useState([])
   const editorViewRef = useRef(null)
 
   const handleChange = (value) => {
     setCode(value)
     if (onChange) onChange(value)
     
-    // Simple error detection (check for common syntax issues)
-    const hasBasicError = 
-      (value.match(/\(/g) || []).length !== (value.match(/\)/g) || []).length ||
-      (value.match(/\{/g) || []).length !== (value.match(/\}/g) || []).length ||
-      (value.match(/\[/g) || []).length !== (value.match(/\]/g) || []).length
+    // Detect syntax errors
+    const detectedErrors = detectErrors(value)
+    const uniqueErrors = getUniqueErrors(detectedErrors)
+    setErrors(uniqueErrors)
     
+    // Simple error detection (check for common syntax issues)
+    const hasBasicError = uniqueErrors.length > 0
     setHasError(hasBasicError)
+  }
+
+  // Get line position for monster placement
+  const getLinePosition = (lineNumber) => {
+    if (!editorViewRef.current) return null
+    
+    try {
+      const line = editorViewRef.current.state.doc.line(lineNumber)
+      const coords = editorViewRef.current.coordsAtPos(line.from)
+      if (coords) {
+        const editorRect = editorViewRef.current.dom.getBoundingClientRect()
+        return {
+          top: coords.top - editorRect.top,
+        }
+      }
+    } catch (e) {
+      console.error('Error getting line position:', e)
+    }
+    
+    return null
   }
 
   // Ghost interaction handlers
@@ -198,7 +222,7 @@ function HauntedEditor({ initialValue = defaultCode, onChange }) {
           </div>
         </div>
 
-        <div className="editor-content">
+        <div className="editor-content" style={{ position: 'relative' }}>
           <CodeMirror
             value={code}
             height="400px"
@@ -236,6 +260,32 @@ function HauntedEditor({ initialValue = defaultCode, onChange }) {
               lintKeymap: true,
             }}
           />
+
+          {/* Error Monsters */}
+          <AnimatePresence>
+            {errors.map((error, index) => {
+              const position = getLinePosition(error.line)
+              if (!position) return null
+
+              return (
+                <div
+                  key={`${error.line}-${error.type}-${index}`}
+                  style={{
+                    position: 'absolute',
+                    top: position.top,
+                    right: 0,
+                    pointerEvents: 'none',
+                  }}
+                >
+                  <Monster
+                    lineNumber={error.line}
+                    errorType={error.type}
+                    message={error.message}
+                  />
+                </div>
+              )
+            })}
+          </AnimatePresence>
         </div>
 
         {/* Flickering Cursor Effect Overlay */}
@@ -276,6 +326,10 @@ function HauntedEditor({ initialValue = defaultCode, onChange }) {
         <span className="status-item">
           <span className="status-icon">😈</span>
           Scares: {scareCount}
+        </span>
+        <span className="status-item">
+          <span className="status-icon">👾</span>
+          Monsters: {errors.length}
         </span>
         <span className="status-item">
           <span className="status-icon">💀</span>

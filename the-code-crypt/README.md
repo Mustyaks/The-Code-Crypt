@@ -215,3 +215,69 @@ export const CURSED_LINES = {
   // Add more lines...
 }
 ```
+
+
+## 👾 Error Monster System
+
+Monsters spawn when syntax errors are detected in your code, providing visual feedback for debugging.
+
+### Monster Types
+
+**🦑 Bracket Monster**
+- Spawns when parentheses (), braces {}, or brackets [] are unmatched
+- Wiggles angrily until brackets are balanced
+
+**🐙 Quote Monster**
+- Appears when quotes are unmatched (', ", `)
+- Pulses with red glow until quotes are closed
+
+**👹 Semicolon Monster**
+- Spawns when semicolons are missing
+- Disappears when semicolon is added
+
+**👾 Generic Monster**
+- Fallback for other syntax errors
+
+### Monster Behavior
+
+- **Spawn Animation**: Rotates in with spring physics
+- **Wiggle Animation**: Continuous rotation and scale effects
+- **Pulsing Glow**: Red radial gradient that pulses
+- **Error Tooltip**: Shows line number and error message
+- **Angry Eyes**: Blink and glare at you
+- **Particle Effects**: Red particles float upward
+- **Auto-Despawn**: Disappears when error is fixed
+
+### Error Detection
+
+The system uses regex-based detection for:
+- Bracket matching: `()`, `{}`, `[]`
+- Quote matching: `'`, `"`, `` ` ``
+- Missing semicolons (heuristic-based)
+- Overall code balance
+
+### Implementation
+
+```javascript
+import { detectErrors } from '@/lib/errorDetection'
+
+// Detect errors in code
+const errors = detectErrors(code)
+// Returns: [{ line, type, message }]
+
+// Spawn monsters for each error
+errors.map(error => (
+  <Monster
+    lineNumber={error.line}
+    errorType={error.type}
+    message={error.message}
+  />
+))
+```
+
+### Try It Out
+
+1. Open the Haunted Editor
+2. Create a syntax error (e.g., remove a closing bracket)
+3. Watch a monster spawn next to the error line
+4. Fix the error to make the monster disappear
